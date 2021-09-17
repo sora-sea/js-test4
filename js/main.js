@@ -39,6 +39,7 @@
       const quiz = new Quiz(data);
       console.log(data);
 
+      
       title.innerText = `問題${index}`;
 
       const category = quiz.getCategory(index);
@@ -67,6 +68,27 @@
       answers.appendChild(answerBtn4);
 
       addBtn.style.display = 'none';
+
+      answerBtn1.addEventListener('click', () => {
+        for (let i = 2; i < 11; i++) {
+          fetchData(i);
+        }
+      });
+      answerBtn2.addEventListener('click', () => {
+        for (let i = 2; i < 11; i++) {
+          fetchData(i);
+        }
+      });
+      answerBtn3.addEventListener('click', () => {
+        for (let i = 2; i < 11; i++) {
+          fetchData(i);
+        }
+      });
+      answerBtn4.addEventListener('click', () => {
+        for (let i = 2; i < 11; i++) {
+          fetchData(i);
+        }
+      });
   }
 
   addBtn.addEventListener('click', () => {
