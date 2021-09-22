@@ -5,8 +5,8 @@
   const genre = document.getElementById('genre');
   const difficulty = document.getElementById('difficulty');
   const question = document.getElementById('question');
-  const addBtn = document.getElementById('startbtn');
-  const answers = document.getElementById('answers');
+  const startBtn = document.getElementById('startbtn');
+  const answersArea = document.getElementById('answers');
   const apiUrl = 'https://opentdb.com/api.php?amount=10';
 
   class Quiz {
@@ -29,6 +29,9 @@
     getIncorrectAnswers(index) {
       return this.quizzes[index -1].incorrect_answers;
     }
+    getNumQuizzes() {
+      return this.quizzes.length;
+    }
   }
 
   const fetchData = async (index) => {
@@ -37,61 +40,48 @@
       const res = await fetch(apiUrl);
       const data = await res.json();
       const quiz = new Quiz(data);
-      console.log(data);
-
-      
-      title.innerText = `問題${index}`;
-
-      const category = quiz.getCategory(index);
-      genre.innerText = `[ジャンル] ${category}`;
-
-      const level = quiz.getDifficulty(index);
-      difficulty.innerText = `[難易度] ${level}`;
-
-      const query = quiz.getQuestion(index);
-      question.innerText = `${query}`;
-
-      const correctAnswer = quiz.getCorrectAnswer(index);
-      const answerBtn1 = document.createElement('button');
-      answerBtn1.innerText = `${correctAnswer}`;
-      answers.appendChild(answerBtn1);
-
-      const incorrectAnswers = quiz.getIncorrectAnswers(index);
-      const answerBtn2 = document.createElement('button');
-      answerBtn2.innerText = `${incorrectAnswers}`;
-      answers.appendChild(answerBtn2);
-      const answerBtn3 = document.createElement('button');
-      answerBtn3.innerText = `${incorrectAnswers}`;
-      answers.appendChild(answerBtn3);
-      const answerBtn4 = document.createElement('button');
-      answerBtn4.innerText = `${incorrectAnswers}`;
-      answers.appendChild(answerBtn4);
-
-      addBtn.style.display = 'none';
-
-      answerBtn1.addEventListener('click', () => {
-        for (let i = 2; i < 11; i++) {
-          fetchData(i);
-        }
-      });
-      answerBtn2.addEventListener('click', () => {
-        for (let i = 2; i < 11; i++) {
-          fetchData(i);
-        }
-      });
-      answerBtn3.addEventListener('click', () => {
-        for (let i = 2; i < 11; i++) {
-          fetchData(i);
-        }
-      });
-      answerBtn4.addEventListener('click', () => {
-        for (let i = 2; i < 11; i++) {
-          fetchData(i);
-        }
-      });
+      setNextQuiz(quiz, index);
   }
 
-  addBtn.addEventListener('click', () => {
+  const setNextQuiz = (quiz,index) => {
+    while (answersArea.firstChild) {
+      answersArea.removeChild(answersArea.firstChild);
+    }
+    if (index <= quiz.getNumQuizzes()) {
+      makeQuiz(quiz, index);
+    }
+  }
+
+  const makeQuiz = (quiz, index) => {
+    title.innerText = `問題${index}`;
+    genre.innerText = `[ジャンル] ${quiz.getCategory(index)}`;
+    difficulty.innerText = `[難易度] ${quiz.getDifficulty(index)}`;
+    question.innerText = quiz.getQuestion(index);
+
+    const answers = buildAnswers(quiz, index);
+
+    answers.forEach((answer) => {
+      const answerElement = document.createElement('li');
+      answersArea.appendChild(answerElement);
+
+      const btnElement = document.createElement('button');
+      btnElement.innerText = answer;
+      answersArea.appendChild(btnElement);
+
+      btnElement.addEventListener('click', () => {
+        quiz.countCorrectAnswers(index, answer);
+        index++;
+        setNextQuiz(quiz, index);
+      });
+    });
+  }
+
+  const buildAnswers = (quiz, index) => {
+    quiz.getCorrectAnswer(index);
+    quiz.getIncorrectAnswers(index);
+  }
+
+  startBtn.addEventListener('click', () => {
     fetchData(1);
   });
 }
