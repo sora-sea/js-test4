@@ -77,11 +77,23 @@
   }
 
   const buildAnswers = (quiz, index) => {
-    quiz.getCorrectAnswer(index);
-    quiz.getIncorrectAnswers(index);
+    const answers = [
+      quiz.getCorrectAnswer(index),
+      ...quiz.getIncorrectAnswers(index)
+    ];
+    return shuffleArray(answers);
+  }
+
+  const shuffleArray = ([...array]) => {
+    for (let i = array.length - 1; i >= 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   }
 
   startBtn.addEventListener('click', () => {
     fetchData(1);
+    startBtn.style.display = 'none';
   });
 }

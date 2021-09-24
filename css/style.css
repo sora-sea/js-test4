@@ -10,6 +10,10 @@ button {
   margin: 5px 0;
 }
 
+li {
+  list-style: none;
+}
+
 #question {
   border-top: 1px solid #808080;
   border-bottom: 1px solid #808080;
@@ -20,4 +24,5 @@ button {
 #answers {
   display: flex;
   flex-direction: column;
+  display: inline-block;
 }
