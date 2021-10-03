@@ -32,6 +32,9 @@
     getNumQuizzes() {
       return this.quizzes.length;
     }
+    countCorrectAnswers(index, answer) {
+      return this.correctAnswersNum++;
+    }
   }
 
   const fetchData = async (index) => {
