@@ -33,7 +33,9 @@
       return this.quizzes.length;
     }
     countCorrectAnswers(index, answer) {
-      return this.correctAnswersNum++;
+      if (answer === this.getCorrectAnswer(index)) {
+        return this.correctAnswersNum++;
+      }
     }
   }
 
