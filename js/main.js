@@ -48,12 +48,23 @@
       setNextQuiz(quiz, index);
   }
 
-  const setNextQuiz = (quiz,index) => {
+  const setNextQuiz = (quiz, index,) => {
     while (answersArea.firstChild) {
       answersArea.removeChild(answersArea.firstChild);
     }
     if (index <= quiz.getNumQuizzes()) {
       makeQuiz(quiz, index);
+    } else {
+      (quiz, index, answer) => {
+        title.innerText = `あなたの正答数は${quiz.countCorrectAnswers(index, answer)}です！！`;
+        question.innerText = '再度チャレンジしたい場合は以下をクリック！！';
+        const reloadBtn = document.createElement('button');
+        reloadBtn.textContent = 'ホームに戻る';
+        answersArea.appendChild(reloadBtn);
+        reloadBtn.addEventListener('click', () => {
+          location.reload();
+        });
+      }
     }
   }
 
