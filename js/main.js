@@ -37,6 +37,9 @@
         return this.correctAnswersNum++;
       }
     }
+    getCorrectAnswersNum() {
+      return this.correctAnswersNum;
+    }
   }
 
   const fetchData = async (index) => {
@@ -55,35 +58,26 @@
     if (index <= quiz.getNumQuizzes()) {
       makeQuiz(quiz, index);
     } else {
-      (quiz, index, answer) => {
-        title.innerText = `あなたの正答数は${quiz.countCorrectAnswers(index, answer)}です！！`;
-        question.innerText = '再度チャレンジしたい場合は以下をクリック！！';
-        const reloadBtn = document.createElement('button');
-        reloadBtn.textContent = 'ホームに戻る';
-        answersArea.appendChild(reloadBtn);
-        reloadBtn.addEventListener('click', () => {
-          location.reload();
-        });
-      }
+      finishQuiz(quiz);
     }
   }
-
+  
   const makeQuiz = (quiz, index) => {
     title.innerText = `問題${index}`;
     genre.innerText = `[ジャンル] ${quiz.getCategory(index)}`;
     difficulty.innerText = `[難易度] ${quiz.getDifficulty(index)}`;
     question.innerText = quiz.getQuestion(index);
-
+    
     const answers = buildAnswers(quiz, index);
-
+    
     answers.forEach((answer) => {
       const answerElement = document.createElement('li');
       answersArea.appendChild(answerElement);
-
+      
       const btnElement = document.createElement('button');
       btnElement.innerText = answer;
       answersArea.appendChild(btnElement);
-
+      
       btnElement.addEventListener('click', () => {
         quiz.countCorrectAnswers(index, answer);
         index++;
@@ -91,7 +85,7 @@
       });
     });
   }
-
+  
   const buildAnswers = (quiz, index) => {
     const answers = [
       quiz.getCorrectAnswer(index),
@@ -99,13 +93,24 @@
     ];
     return shuffleArray(answers);
   }
-
+  
   const shuffleArray = ([...array]) => {
     for (let i = array.length - 1; i >= 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+  }
+  
+  const finishQuiz = (quiz) => {
+    title.innerText = `あなたの正答数は${quiz.getCorrectAnswersNum()}です！！`;
+    question.innerText = '再度チャレンジしたい場合は以下をクリック！！';
+    const reloadBtn = document.createElement('button');
+    reloadBtn.textContent = 'ホームに戻る';
+    answersArea.appendChild(reloadBtn);
+    reloadBtn.addEventListener('click', () => {
+      location.reload();
+    });
   }
 
   startBtn.addEventListener('click', () => {
