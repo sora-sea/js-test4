@@ -51,6 +51,7 @@
       setNextQuiz(quiz, index);
   }
 
+  // 10回問題を出しその後結果を出す関数定義
   const setNextQuiz = (quiz, index,) => {
     while (answersArea.firstChild) {
       answersArea.removeChild(answersArea.firstChild);
@@ -62,6 +63,7 @@
     }
   }
   
+  // 問題画面の関数定義
   const makeQuiz = (quiz, index) => {
     title.innerText = `問題${index}`;
     genre.innerText = `[ジャンル] ${quiz.getCategory(index)}`;
@@ -86,14 +88,17 @@
     });
   }
   
+  // 回答ボタンの回答内容を出す関数定義
   const buildAnswers = (quiz, index) => {
     const answers = [
       quiz.getCorrectAnswer(index),
       ...quiz.getIncorrectAnswers(index)
     ];
     return shuffleArray(answers);
+
   }
   
+  // 回答ボタンをランダムにする関数定義
   const shuffleArray = ([...array]) => {
     for (let i = array.length - 1; i >= 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -102,6 +107,7 @@
     return array;
   }
   
+  // 結果画面の関数定義
   const finishQuiz = (quiz) => {
     title.innerText = `あなたの正答数は${quiz.getCorrectAnswersNum()}です！！`;
     question.innerText = '再度チャレンジしたい場合は以下をクリック！！';
@@ -113,6 +119,7 @@
     });
   }
 
+  // 開始ボタンを押した時の関数定義
   startBtn.addEventListener('click', () => {
     fetchData(1);
     startBtn.style.display = 'none';
