@@ -45,10 +45,14 @@
   const fetchData = async (index) => {
     title.innerText = '取得中';
     question.innerText = '少々お待ちください';
+    try {
       const res = await fetch(apiUrl);
       const data = await res.json();
       const quiz = new Quiz(data);
       setNextQuiz(quiz, index);
+    } catch(e) {
+      console.log(e.message);
+    }
   }
 
   // 10回問題を出しその後結果を出す関数定義
